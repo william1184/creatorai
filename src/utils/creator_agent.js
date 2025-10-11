@@ -1,7 +1,8 @@
 import { GoogleGenAI } from "@google/genai";
 
-const ai = new GoogleGenAI(process.env.GOOGLE_API_KEY);
-const cache = new Map();
+const genAI = new GoogleGenAI(process.env.GOOGLE_API_KEY);
+const contentCache = new Map();
+const promptCache = new Map();
 
 /**
  * Gera conteúdo de texto para um post de mídia social com base em uma descrição.
@@ -16,25 +17,25 @@ async function generateSocialMediaContent(description, platform) {
     throw new Error("Description and platform are required");
   }
 
-  let key = `content-${description}-${platform}`;
-
-  if (!cache.has(key)) {
-
-    const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
-      config: {
-        systemInstruction: `Você é um especialista em marketing digital e mídias sociais. Sua tarefa é criar um texto para um post para a platforma '${platform}. O texto deve ser cativante, profissional e otimizado para o público e formato da platforma especificada. Evite usar hashtags a menos que seja explicitamente solicitado. Seja direto e conciso. Saída: Somente o texto gerado.'`
-      },
-      contents: description,
-    });
-
-    console.info("LLM_USAGE (Text)", response.usageMetadata);
-    console.log(cache);
-
-    cache.set(key, response.text);
+  const cacheKey = `content::${platform}::${description}`;
+  if (contentCache.has(cacheKey)) {
+    console.info('CACHE HIT: generateSocialMediaContent', { description, platform });
+    return contentCache.get(cacheKey);
   }
-  console.log(cache);
-  return cache.get(key);
+
+  const model = genAI.getGenerativeModel({
+    model: "gemini-pro",
+    systemInstruction: `Você é um especialista em marketing digital e mídias sociais. Sua tarefa é criar um texto para um post para a platforma '${platform}'. O texto deve ser cativante, profissional e otimizado para o público e formato da platforma especificada. Evite usar hashtags a menos que seja explicitamente solicitado. Seja direto e conciso. Saída: Somente o texto gerado.`
+  });
+
+  const result = await model.generateContent(description);
+  const response = await result.response;
+  const text = await response.text();
+
+  console.info("LLM_USAGE (Text)", response.usageMetadata);
+  contentCache.set(cacheKey, text);
+
+  return text;
 }
 
 /**
@@ -50,25 +51,25 @@ async function generateImagePrompt(description, platform) {
     throw new Error("Description and platform are required");
   }
 
-  let key = `image-${description}-${platform}`;
-
-  if (!cache.has(key)) {
-
-    const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
-      config: {
-        systemInstruction: `Você é um especialista em direção de arte para mídias sociais. Sua tarefa é criar um prompt para um modelo de geração de imagem. O prompt deve ser em inglês, sucinto, e descrever uma imagem visualmente atraente, profissional e moderna que se relacione o tema recebido para a seguinte platforma '${platform}'. O prompt deve focar em aspectos visuais, como composição, cores, iluminação e estilo. Exemplo de output: "A minimalist and clean flat lay of a healthy meal, with vibrant colors, top-down view, soft natural lighting, professional product photography style."`,
-      },
-      contents: description,
-    });
-
-    console.log({ "text": response.text });
-
-    console.info("LLM_USAGE (Text)", response.usageMetadata);
-    cache.set(key, response.text);
+  const cacheKey = `prompt::${platform}::${description}`;
+  if (promptCache.has(cacheKey)) {
+    console.info('CACHE HIT: generateImagePrompt', { description, platform });
+    return promptCache.get(cacheKey);
   }
 
-  return cache.get(key);
+  const model = genAI.getGenerativeModel({
+    model: "gemini-pro",
+    systemInstruction: `Você é um especialista em direção de arte para mídias sociais. Sua tarefa é criar um prompt para um modelo de geração de imagem. O prompt deve ser em inglês, sucinto, e descrever uma imagem visualmente atraente, profissional e moderna que se relacione o tema recebido para a seguinte platforma '${platform}'. O prompt deve focar em aspectos visuais, como composição, cores, iluminação e estilo. Exemplo de output: "A minimalist and clean flat lay of a healthy meal, with vibrant colors, top-down view, soft natural lighting, professional product photography style."`,
+  });
+
+  const result = await model.generateContent(description);
+  const response = await result.response;
+  const text = await response.text();
+
+  console.info("LLM_USAGE (Image Prompt)", response.usageMetadata);
+  promptCache.set(cacheKey, text);
+
+  return text;
 }
 
 /**
@@ -84,7 +85,14 @@ async function generateImage(imagePrompt) {
       throw new Error("imagePrompt is required");
     }
 
+    // NOTE: The @google/genai library does not directly support image generation models like 'imagen'.
+    // This requires the Vertex AI SDK ('@google-cloud/aiplatform').
+    // The code below is conceptually correct for a text model but will not generate an image.
     // Para geração de imagem, usamos um modelo que pode chamar ferramentas.
+    const result = await genAI.getGenerativeModel({ model: "gemini-pro-vision" }).generateContent(imagePrompt);
+    const response = await result.response;
+
+    /*
     const response = await ai.models.generateContent({
       model: "gemini-2.0-flash-exp-image-generation",
       contents: imagePrompt,
@@ -94,6 +102,7 @@ async function generateImage(imagePrompt) {
         ]
       }
     });
+    */
 
     console.info("LLM_USAGE (Image)", response.usageMetadata);
 

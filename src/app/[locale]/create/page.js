@@ -2,7 +2,7 @@
 import { useLocale, useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { Fragment, useEffect, useState } from 'react';
-import { FaSave, FaShareAlt } from 'react-icons/fa'; // Importando ícones do FontAwesome
+import { FaShareAlt } from 'react-icons/fa'; // Importando ícones do FontAwesome
 import { v4 as uuidv4 } from 'uuid';
 
 export default function Create() {
@@ -146,19 +146,6 @@ export default function Create() {
     }
   };
 
-  const createCanvasFromPreview = async (platform) => {
-    const element = document.getElementById(`preview-${platform}`);
-    if (!element) return;
-
-    const canvas = await html2canvas(element, {
-      scale: 2,
-      useCORS: true,
-      backgroundColor: null,
-    });
-
-    return canvas.toDataURL('image/png');
-  };
-
   const handleSocialShare = async (platform) => {
     // Copia o texto para a área de transferência
     await navigator.clipboard.writeText(generatedText);
@@ -194,28 +181,6 @@ export default function Create() {
     }
   };
 
-  const shareImage = async (platform) => {
-    try {
-      const image = await createCanvasFromPreview(platform);
-      if (!image) return;
-    } catch (error) {
-      console.error('Error sharing image:', error);
-    }
-  };
-
-  const saveImage = async (platform) => {
-    try {
-      const image = await createCanvasFromPreview(platform);
-      if (!image) return;
-
-      const link = document.createElement('a');
-      link.href = image;
-      link.download = `${platform}-post.png`;
-      link.click();
-    } catch (error) {
-      console.error('Error saving image:', error);
-    }
-  };
 
   // Componente para renderizar os previews das redes sociais
   const SocialPreview = ({ platform, imageUrl, text }) => {
@@ -410,8 +375,7 @@ export default function Create() {
                   <div className="w-full max-w-sm mx-auto">
                     <SocialPreview platform={platform} imageUrl={generatedImageUrl} text={generatedText} />
                   </div>
-                  <div className="mt-4 flex gap-2">
-                    <button onClick={() => saveImage(platform)} className="bg-zinc-200 hover:bg-zinc-300 text-zinc-700 dark:bg-zinc-700 dark:text-white dark:hover:bg-zinc-600 font-bold py-1 px-3 rounded-md text-sm flex items-center gap-1.5"><FaSave /> Salvar</button>
+                  <div className="mt-4 flex gap-2">                    
                     {platform === 'instagram' ? (
                       <button onClick={() => handleSocialShare('instagram')} className="bg-pink-100 hover:bg-pink-200 text-pink-600 dark:bg-pink-900/50 dark:text-pink-400 dark:hover:bg-pink-900 font-bold py-1 px-3 rounded-md text-sm">
                         {copiedPlatform === 'instagram' ? 'Copiado!' : 'Copiar Texto'}

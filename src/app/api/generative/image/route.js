@@ -12,7 +12,7 @@ export async function POST(request) {
         console.log("Image generation request received:", description, platform, imageId);
 
         if (!description || !platform || !imageId) {
-            return new Response(JSON.stringify({ error: 'Description, platform and imageId are required' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
+            return Response.json({ error: 'Description, platform and imageId are required' }, { status: 400 });
         }
 
         // gerar prompt para imagem
@@ -33,11 +33,11 @@ export async function POST(request) {
         await fs.mkdir('/tmp', { recursive: true });
         await fs.writeFile(filePath, imageBuffer);
         
-        return new Response(JSON.stringify({ data: { imageId: imageId } }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+        return Response.json({ data: { imageId: imageId } });
 
     } catch (error) {
         console.error('Error in /api/generative/image:', error);
-        return new Response(JSON.stringify({ error: 'Failed to generate image prompt' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+        return Response.json({ error: 'Failed to generate image prompt' }, { status: 500 });
     }
 }
 
@@ -47,7 +47,7 @@ export async function GET(request) {
         const imageId = searchParams.get('id');
 
         if (!imageId) {
-            return new Response(JSON.stringify({ error: 'Image ID is required' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
+            return Response.json({ error: 'Image ID is required' }, { status: 400 });
         }
 
         const filePath = path.join('/tmp', imageId);
@@ -65,9 +65,9 @@ export async function GET(request) {
     } catch (error) {
         if (error.code === 'ENOENT') {
             // ENOENT = Error NO ENTry (file not found)
-            return new Response(JSON.stringify({ error: 'Image not found' }), { status: 404, headers: { 'Content-Type': 'application/json' } });
+            return Response.json({ error: 'Image not found' }, { status: 404 });
         }
         console.error('Error in GET /api/generative/image:', error);
-        return new Response(JSON.stringify({ error: 'Failed to retrieve image' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+        return Response.json({ error: 'Failed to retrieve image' }, { status: 500 });
     }
 }
