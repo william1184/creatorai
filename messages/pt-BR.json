@@ -1,0 +1,23 @@
+{
+  "HomePage": {
+    "pageTitle": "Creator AI",
+    "pageDescription": "Gere posts para mídias sociais com o poder da IA.",
+    "metaKeywords": "criador de conteúdo ia, mídias sociais, gerador de posts, marketing",
+    "metaAuthor": "Time Creator AI",
+    "ogTitle": "Creator AI - Gerador de Posts para Mídias Sociais",
+    "ogDescription": "Gere posts para mídias sociais com o poder da IA.",
+    "headerTitle": "Creator AI",
+    "generatingContent": "🔮 Gerando conteúdo...",
+    "poweredBy": "Powered by Creator AI",
+    "shareButton": "Compartilhar",
+    "saveButton": "Salvar Imagem",
+    "backButton": "Voltar",
+    "shareNotSupportedAlert": "Compartilhamento não suportado neste navegador.",
+    "shareImageTitle": "Confira este post criado com IA!",
+    "shareImageText": "Acabei de criar este post para mídias sociais usando o Creator AI!",
+    "fileNamePrediction": "creator-ai-post.png"
+  },
+  "Footer": {
+    "copyright": "Creator AI. Todos os direitos reservados."
+  }
+}

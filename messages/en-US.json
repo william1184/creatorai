@@ -1,0 +1,23 @@
+{
+  "HomePage": {
+    "pageTitle": "Creator AI",
+    "pageDescription": "Generate social media posts with the power of AI.",
+    "metaKeywords": "ai content creator, social media, post generator, marketing",
+    "metaAuthor": "Creator AI Team",
+    "ogTitle": "Creator AI - Social Media Post Generator",
+    "ogDescription": "Generate social media posts with the power of AI.",
+    "headerTitle": "Creator AI",
+    "generatingContent": "🔮 Generating content...",
+    "poweredBy": "Powered by Creator AI",
+    "shareButton": "Share",
+    "saveButton": "Save Image",
+    "backButton": "Back",
+    "shareNotSupportedAlert": "Sharing not supported in this browser.",
+    "shareImageTitle": "Check out this post created with AI!",
+    "shareImageText": "I just created this social media post using Creator AI!",
+    "fileNamePrediction": "creator-ai-post.png"
+  },
+  "Footer": {
+    "copyright": "Creator AI. All rights reserved."
+  }
+}

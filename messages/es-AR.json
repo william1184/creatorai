@@ -1,0 +1,42 @@
+{
+  "HomePage": {
+    "pageTitle": "Horóscopo IA",
+    "pageDescription": "Descubre tus predicciones diarias del horóscopo con Horóscopo IA.",
+    "metaKeywords": "horóscopo, astrología, predicciones diarias, signos del zodiaco",
+    "metaAuthor": "Equipo Horóscopo IA",
+    "ogTitle": "Horóscopo IA - Predicciones Diarias",
+    "ogDescription": "Descubre tus predicciones diarias del horóscopo con Horóscopo IA.",
+    "headerTitle": "Horóscopo IA",
+    "titlePrompt": "¿Quieres echar un vistazo al futuro?",
+    "instructions": "Descubre lo que te espera hoy.<br></br>¡Selecciona tu signo y embárcate en este viaje astral!",
+    "loadingSigns": "Cargando signos...",
+    "consultingStars": "🔮 Consultando a los astros...",
+    "predictionCardTitle": "Tu Predicción",
+    "predictionCardQuote": "\"¡Confía en los astros y disfruta el día!\"",
+    "poweredBy": "Desarrollado por Horóscopo IA",
+    "shareButton": "Compartir",
+    "saveButton": "Guardar Imagen",
+    "backButton": "Volver",
+    "shareNotSupportedAlert": "Compartir no es compatible con este navegador.",
+    "shareImageTitle": "Mi predicción para el día",
+    "shareImageText": "¡Mira mi predicción para el día generada por Horóscopo IA!",
+    "fileNamePrediction": "prediccion.png"
+  },
+  "Signs": {
+    "aries": "Aries",
+    "taurus": "Tauro",
+    "gemini": "Géminis",
+    "cancer": "Cáncer",
+    "leo": "Leo",
+    "virgo": "Virgo",
+    "libra": "Libra",
+    "scorpio": "Escorpio",
+    "sagittarius": "Sagitario",
+    "capricorn": "Capricornio",
+    "aquarius": "Acuario",
+    "pisces": "Piscis"
+  },
+  "Footer": {
+    "copyright": "Horoscope AI. All rights reserved."
+  }
+}
