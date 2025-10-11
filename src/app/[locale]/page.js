@@ -1,4 +1,5 @@
 'use client';
+import Link from 'next/link';
 import { FaBolt, FaLightbulb, FaMagic, FaSyncAlt } from 'react-icons/fa';
 
 export default function Home() {
@@ -21,12 +22,12 @@ export default function Home() {
           <p className="mt-6 text-lg text-zinc-600 dark:text-zinc-300 max-w-2xl mx-auto">
             Nossa IA gera textos e imagens otimizados para engajamento, permitindo que você foque no que realmente importa: seu negócio.
           </p>
-          <a
+          <Link
             href="/create" // Assuming the tool is at /create
             className="mt-8 inline-block bg-blue-600 text-white font-bold text-lg py-3 px-8 rounded-lg hover:bg-blue-700 transition-colors"
           >
             Comece a Criar Agora
-          </a>
+          </Link>
         </section>
 
         {/* Benefits Section */}
@@ -47,12 +48,12 @@ export default function Home() {
         {/* CTA Section */}
         <section className="w-full py-20 animate-fade-in-delay-2">
           <h2 className="text-3xl md:text-4xl font-bold text-zinc-800 dark:text-white">Pronto para otimizar seu conteúdo?</h2>
-          <a
+          <Link
             href="/create" // Assuming the tool is at /create
             className="mt-8 inline-block bg-blue-600 text-white font-bold text-xl py-4 px-10 rounded-lg hover:bg-blue-700 transition-colors"
           >
             Experimente de Graça
-          </a>
+          </Link>
         </section>
       </main>
     </div>

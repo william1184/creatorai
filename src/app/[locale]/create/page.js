@@ -1,5 +1,6 @@
 'use client';
 import { useLocale, useTranslations } from 'next-intl';
+import Image from 'next/image';
 import { Fragment, useEffect, useState } from 'react';
 import { FaSave, FaShareAlt } from 'react-icons/fa'; // Importando ícones do FontAwesome
 import { v4 as uuidv4 } from 'uuid';
@@ -227,7 +228,7 @@ export default function Create() {
             <div className="ml-2 text-sm font-semibold">seu_usuario</div>
           </div>
           {/* Image */}
-          <img src={imageUrl} alt="Preview do post" className="w-full h-auto aspect-square object-cover" />
+          <Image src={imageUrl} alt="Preview do post" className="w-full h-auto aspect-square object-cover" />
           {/* Actions */}
           <div className="p-2 flex items-center space-x-4 text-2xl">
             <span>♡</span><span>💬</span><span>➢</span>
@@ -254,7 +255,7 @@ export default function Create() {
           {/* Text */}
           <p className="px-3 pb-2 whitespace-pre-wrap text-sm">{text}</p>
           {/* Image */}
-          <img src={imageUrl} alt="Preview do post" className="w-full h-auto" />
+          <Image src={imageUrl} alt="Preview do post" className="w-full h-auto" />
           {/* Reactions */}
           <div className="flex justify-around p-2 border-t border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-300 text-sm font-semibold">
             <div>👍 Curtir</div>
@@ -276,7 +277,7 @@ export default function Create() {
           {/* Text */}
           <p className="px-3 pb-2 whitespace-pre-wrap text-sm">{text}</p>
           {/* Image */}
-          <img src={imageUrl} alt="Preview do post" className="w-full h-auto" />
+          <Image src={imageUrl} alt="Preview do post" className="w-full h-auto" />
           {/* Actions */}
           <div className="flex justify-around p-2 border-t border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-300 text-sm font-semibold">
             <div>👍 Recomendar</div>
@@ -302,7 +303,7 @@ export default function Create() {
                 {history.length > 0 ? (
                   history.map(item => (
                     <div key={item.id} onClick={() => handleLoadFromHistory(item)} className="flex items-center gap-4 p-3 bg-zinc-100 dark:bg-zinc-800/50 rounded-lg cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors">
-                      <img src={item.imageUrl} alt={item.theme} className="w-16 h-16 object-cover rounded-md flex-shrink-0" />
+                      <Image src={item.imageUrl} alt={item.theme} className="w-16 h-16 object-cover rounded-md flex-shrink-0" />
                       <div className="text-left flex-grow overflow-hidden">
                         <p className="font-semibold text-zinc-700 dark:text-zinc-200 truncate">{item.theme}</p>
                         <p className="text-xs text-zinc-500 dark:text-zinc-400">{new Date(item.timestamp).toLocaleString()}</p>
@@ -386,7 +387,7 @@ export default function Create() {
               {generatedImageUrl && (
                 <Fragment>
                   <h3 className="font-bold text-zinc-800 dark:text-white">Imagem Gerada:</h3>
-                  <img src={generatedImageUrl} alt="Imagem gerada por IA" className="mx-auto my-4 max-w-full h-auto rounded-lg shadow-md" />
+                  <Image src={generatedImageUrl} alt="Imagem gerada por IA" className="mx-auto my-4 max-w-full h-auto rounded-lg shadow-md" />
                   <div className="mt-6 flex flex-col sm:flex-row justify-center gap-3">
                     <button onClick={handleAcceptImage} className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">Aceitar e Ver Preview</button>
                     <button onClick={handleAcceptTheme} className="bg-zinc-200 hover:bg-zinc-300 text-zinc-700 dark:bg-zinc-700 dark:text-white dark:hover:bg-zinc-600 font-bold py-2 px-4 rounded-lg" disabled={loading}>Gerar Outra Imagem</button>
