@@ -31,9 +31,9 @@ async function generateSocialMediaContent(description, platform) {
   const response = await ai.models.generateContent({
     model: "gemini-2.5-flash",
     config: {
-      systemInstruction: `Você é um especialista em marketing digital e mídias sociais. Sua tarefa é criar um texto para um post para a platforma '${platform} com no maximo ${socialMediaConfig[platform].max_length} caracteres.'. 
+      systemInstruction: `Você é um especialista em marketing digital e mídias sociais. Sua tarefa é criar um texto para um post para a platforma '${platform}'. 
       O texto deve ser **${socialMediaConfig[platform].focus}** , profissional e otimizado para o público e formato da platforma especificada. Evite usar hashtags a menos que seja explicitamente solicitado. 
-      Seja direto e conciso. Output: Somente o texto gerado.`
+      Seja conciso e use fontes confiáveis. Output: Somente o texto gerado com até ${socialMediaConfig[platform].max_length} caracteres.`
     },
     contents: description
   });
@@ -71,7 +71,6 @@ async function generateImagePrompt(description, platform) {
     O prompt deve focar em aspectos visuais, como composição, cores, iluminação e estilo. Exemplo de output: "A minimalist and clean flat lay of a healthy meal, with vibrant colors, top-down view, 
     soft natural lighting, professional product photography style."`
     },
-
     contents: description
   });
 

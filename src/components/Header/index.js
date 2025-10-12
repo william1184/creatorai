@@ -1,6 +1,5 @@
 'use client'
 
-import SelectLanguage from '@/components/SelectLanguage'
 import Link from 'next/link'
 
 const AppHeader = ({ metadata, locale }) => {
@@ -13,10 +12,10 @@ const AppHeader = ({ metadata, locale }) => {
             {metadata.title}
           </span>
         </Link>
-
+{/* 
         <div className="absolute right-4 sm:right-6 lg:right-8 top-1/2 transform -translate-y-1/2 z-30"> 
           <SelectLanguage locale={locale} />
-        </div>
+        </div> */}
       </nav>
     </header>
   )
