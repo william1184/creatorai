@@ -1,8 +1,13 @@
 import { GoogleGenAI } from "@google/genai";
-
-const genAI = new GoogleGenAI(process.env.GOOGLE_API_KEY);
+const ai = new GoogleGenAI(process.env.GOOGLE_API_KEY);
 const contentCache = new Map();
 const promptCache = new Map();
+
+const socialMediaConfig = {
+  'facebook': { max_length: 80, focus: 'Emotion + simplicity' },
+  'instagram': { max_length: 200, focus: 'Visual + relatable' },
+  'linkedin': { max_length: 600, focus: 'Insight + storytelling' },
+}
 
 /**
  * Gera conteúdo de texto para um post de mídia social com base em uma descrição.
@@ -23,19 +28,20 @@ async function generateSocialMediaContent(description, platform) {
     return contentCache.get(cacheKey);
   }
 
-  const model = genAI.getGenerativeModel({
-    model: "gemini-pro",
-    systemInstruction: `Você é um especialista em marketing digital e mídias sociais. Sua tarefa é criar um texto para um post para a platforma '${platform}'. O texto deve ser cativante, profissional e otimizado para o público e formato da platforma especificada. Evite usar hashtags a menos que seja explicitamente solicitado. Seja direto e conciso. Saída: Somente o texto gerado.`
+  const response = await ai.models.generateContent({
+    model: "gemini-2.5-flash",
+    config: {
+      systemInstruction: `Você é um especialista em marketing digital e mídias sociais. Sua tarefa é criar um texto para um post para a platforma '${platform} com no maximo ${socialMediaConfig[platform].max_length} caracteres.'. 
+      O texto deve ser **${socialMediaConfig[platform].focus}** , profissional e otimizado para o público e formato da platforma especificada. Evite usar hashtags a menos que seja explicitamente solicitado. 
+      Seja direto e conciso. Output: Somente o texto gerado.`
+    },
+    contents: description
   });
 
-  const result = await model.generateContent(description);
-  const response = await result.response;
-  const text = await response.text();
-
   console.info("LLM_USAGE (Text)", response.usageMetadata);
-  contentCache.set(cacheKey, text);
+  contentCache.set(cacheKey, response.text);
 
-  return text;
+  return contentCache.get(cacheKey);
 }
 
 /**
@@ -57,19 +63,22 @@ async function generateImagePrompt(description, platform) {
     return promptCache.get(cacheKey);
   }
 
-  const model = genAI.getGenerativeModel({
-    model: "gemini-pro",
-    systemInstruction: `Você é um especialista em direção de arte para mídias sociais. Sua tarefa é criar um prompt para um modelo de geração de imagem. O prompt deve ser em inglês, sucinto, e descrever uma imagem visualmente atraente, profissional e moderna que se relacione o tema recebido para a seguinte platforma '${platform}'. O prompt deve focar em aspectos visuais, como composição, cores, iluminação e estilo. Exemplo de output: "A minimalist and clean flat lay of a healthy meal, with vibrant colors, top-down view, soft natural lighting, professional product photography style."`,
+  const response = await ai.models.generateContent({
+    model: "gemini-2.5-flash",
+    config: {
+      systemInstruction: `Você é um especialista em direção de arte para mídias sociais. Sua tarefa é criar um prompt para um modelo de geração de imagem. 
+    O prompt deve ser em inglês, sucinto, e descrever uma imagem visualmente atraente, profissional e moderna que se relacione o tema recebido para a seguinte platforma '${platform}'. 
+    O prompt deve focar em aspectos visuais, como composição, cores, iluminação e estilo. Exemplo de output: "A minimalist and clean flat lay of a healthy meal, with vibrant colors, top-down view, 
+    soft natural lighting, professional product photography style."`
+    },
+
+    contents: description
   });
 
-  const result = await model.generateContent(description);
-  const response = await result.response;
-  const text = await response.text();
-
   console.info("LLM_USAGE (Image Prompt)", response.usageMetadata);
-  promptCache.set(cacheKey, text);
+  promptCache.set(cacheKey, response.text);
 
-  return text;
+  return promptCache.get(cacheKey);
 }
 
 /**
@@ -85,14 +94,6 @@ async function generateImage(imagePrompt) {
       throw new Error("imagePrompt is required");
     }
 
-    // NOTE: The @google/genai library does not directly support image generation models like 'imagen'.
-    // This requires the Vertex AI SDK ('@google-cloud/aiplatform').
-    // The code below is conceptually correct for a text model but will not generate an image.
-    // Para geração de imagem, usamos um modelo que pode chamar ferramentas.
-    const result = await genAI.getGenerativeModel({ model: "gemini-pro-vision" }).generateContent(imagePrompt);
-    const response = await result.response;
-
-    /*
     const response = await ai.models.generateContent({
       model: "gemini-2.0-flash-exp-image-generation",
       contents: imagePrompt,
@@ -102,7 +103,6 @@ async function generateImage(imagePrompt) {
         ]
       }
     });
-    */
 
     console.info("LLM_USAGE (Image)", response.usageMetadata);
 

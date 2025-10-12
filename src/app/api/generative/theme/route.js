@@ -1,3 +1,4 @@
+import { generateSocialMediaContent } from "@/utils/creator_agent";
 
 export async function POST(request) {
     try {
@@ -5,11 +6,16 @@ export async function POST(request) {
         const { description, platform } = body;
 
         if (!description || !platform) {
-            return Response.json({ error: 'Description and platform are required' }, { status: 400 });
+            return new Response(JSON.stringify({ error: 'Description and platform are required' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
         }
+
+        const generatedText = await generateSocialMediaContent(description, platform);
+
+        // Retornando um objeto JSON padrão, que é o que o Next.js faz por baixo dos panos com Response.json
+        return new Response(JSON.stringify({ data: { text: generatedText } }), { status: 201, headers: { 'Content-Type': 'application/json' } });
 
     } catch (error) {
         console.error('Error in /api/generative/theme:', error);
-        return Response.json({ error: 'Failed to generate content' }, { status: 500 });
+        return new Response(JSON.stringify({ error: 'Failed to generate content' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
     }
 }
