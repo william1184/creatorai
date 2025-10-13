@@ -6,7 +6,7 @@ export async function POST(request) {
         const body = await request.json();
         const { description, platform } = body;
 
-        console.log("Image generation request received:", description, platform);
+        console.log("Image prompt request received:", description, platform);
 
         if (!description || !platform) {
             return Response.json({ error: 'Description and platform are required' }, { status: 400 });
@@ -14,8 +14,7 @@ export async function POST(request) {
 
         // gerar prompt para imagem
         const imagePrompt = await generateImagePrompt(description, platform);
-        console.log(imagePrompt);
-        console.log("Prompt created");
+        
         return Response.json({ data: { imagePrompt: imagePrompt } }, { status: 201 });
 
     } catch (error) {

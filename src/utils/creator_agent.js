@@ -1,5 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
-const ai = new GoogleGenAI(process.env.GOOGLE_API_KEY);
+const ai = new GoogleGenAI({});
 const contentCache = new Map();
 const promptCache = new Map();
 
@@ -119,4 +119,3 @@ async function generateImage(imagePrompt) {
 }
 
 export { generateImage, generateImagePrompt, generateSocialMediaContent };
-
