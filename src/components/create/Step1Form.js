@@ -3,6 +3,10 @@ export default function Step1Form({
   setPlatform,
   themeInput,
   setThemeInput,
+  companyName,
+  setCompanyName,
+  category,
+  setCategory,
   handleThemeSubmit,
   loading,
   generatedText,
@@ -34,8 +38,41 @@ export default function Step1Form({
             ))}
           </div>
         </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label htmlFor="companyName" className="block text-lg font-semibold text-zinc-700 dark:text-zinc-200 mb-3">2. Nome da Empresa</label>
+            <input
+              id="companyName"
+              type="text"
+              className="w-full p-3 border-2 border-zinc-200 dark:border-zinc-700 rounded-lg bg-zinc-50 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+              value={companyName}
+              onChange={(e) => setCompanyName(e.target.value)}
+              placeholder="Ex: InovaTech Soluções"
+            />
+          </div>
+          <div>
+            <label htmlFor="category" className="block text-lg font-semibold text-zinc-700 dark:text-zinc-200 mb-3">3. Categoria</label>
+            <select
+              id="category"
+              className="w-full p-3 border-2 border-zinc-200 dark:border-zinc-700 rounded-lg bg-zinc-50 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            >
+              <option value="">Selecione uma categoria</option>
+              <option value="Tecnologia">Tecnologia</option>
+              <option value="Saúde e Bem-estar">Saúde e Bem-estar</option>
+              <option value="Educação">Educação</option>
+              <option value="Varejo">Varejo</option>
+              <option value="Serviços Financeiros">Serviços Financeiros</option>
+              <option value="Alimentação">Alimentação</option>
+              <option value="Outro">Outro</option>
+            </select>
+          </div>
+        </div>
+
         <div>
-          <label htmlFor="themeInput" className="block text-lg font-semibold text-zinc-700 dark:text-zinc-200 mb-3">2. Descreva o tema do seu post</label>
+          <label htmlFor="themeInput" className="block text-lg font-semibold text-zinc-700 dark:text-zinc-200 mb-3">4. Descreva o tema do seu post</label>
           <textarea
             id="themeInput"
             className="w-full p-3 border-2 border-zinc-200 dark:border-zinc-700 rounded-lg bg-zinc-50 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"

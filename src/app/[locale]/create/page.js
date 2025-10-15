@@ -15,9 +15,13 @@ export default function Create() {
   const [step, setStep] = useState(1);
   const [platform, setPlatform] = useState('instagram'); // Default to Instagram
   const [themeInput, setThemeInput] = useState('');
+  const [companyName, setCompanyName] = useState('');
+  const [category, setCategory] = useState('');
   const [generatedText, setGeneratedText] = useState('');
   const [generatedImagePrompt, setGeneratedImagePrompt] = useState('');
   const [generatedImageUrl, setGeneratedImageUrl] = useState('');
+  const [finalImageUrl, setFinalImageUrl] = useState(''); // URL da imagem com logo
+  const [logo, setLogo] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [copiedPlatform, setCopiedPlatform] = useState('');
@@ -49,7 +53,12 @@ export default function Create() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ description: themeInput, platform: platform }),
+        body: JSON.stringify({
+          description: themeInput,
+          platform: platform,
+          company_name: companyName,
+          category: category
+        }),
       });
 
       const response = await res.json();
@@ -130,12 +139,13 @@ export default function Create() {
   };
 
   const handleAcceptImage = () => {
+    const imageToSave = finalImageUrl || generatedImageUrl;
     const newItem = {
       id: uuidv4(),
       theme: themeInput,
       text: generatedText,
       imagePrompt: generatedImagePrompt,
-      imageUrl: generatedImageUrl,
+      imageUrl: imageToSave,
       platform: platform,
       timestamp: new Date().toISOString(),
     };
@@ -151,6 +161,7 @@ export default function Create() {
   const handleBack = () => {
     setStep(step - 1);
     setError('');
+    if (step === 4) setFinalImageUrl(''); // Limpa a imagem final ao voltar da preview
   };
 
 
@@ -158,9 +169,13 @@ export default function Create() {
     setStep(1);
     setPlatform('instagram');
     setThemeInput('');
+    setCompanyName('');
+    setCategory('');
     setGeneratedText('');
     setGeneratedImagePrompt('');
     setGeneratedImageUrl('');
+    setFinalImageUrl('');
+    setLogo(null);
     setLoading(false);
     setError('');
     setShowHistory(false);
@@ -171,7 +186,7 @@ export default function Create() {
     setThemeInput(item.theme);
     setGeneratedText(item.text);
     setGeneratedImagePrompt(item.imagePrompt);
-    setGeneratedImageUrl(item.imageUrl);
+    setFinalImageUrl(item.imageUrl); // Carrega a imagem final (pode ter logo)
     setStep(4);
     setShowHistory(false);
   };
@@ -237,6 +252,10 @@ export default function Create() {
             setPlatform={setPlatform}
             themeInput={themeInput}
             setThemeInput={setThemeInput}
+            companyName={companyName}
+            setCompanyName={setCompanyName}
+            category={category}
+            setCategory={setCategory}
             handleThemeSubmit={handleThemeSubmit}
             loading={loading}
             generatedText={generatedText}
@@ -263,6 +282,9 @@ export default function Create() {
             generatedImageUrl={generatedImageUrl}
             handleAcceptImage={handleAcceptImage}
             handleGenerateImage={handleGenerateImage}
+            logo={logo}
+            setLogo={setLogo}
+            setFinalImageUrl={setFinalImageUrl}
             handleBack={handleBack}
           />
         )}
@@ -270,7 +292,7 @@ export default function Create() {
         {/* Step 4: Preview */}
         {step === 4 && (
           <Step4Preview
-            generatedImageUrl={generatedImageUrl}
+            generatedImageUrl={finalImageUrl || generatedImageUrl}
             generatedText={generatedText}
             handleSocialShare={handleSocialShare}
             copiedPlatform={copiedPlatform}

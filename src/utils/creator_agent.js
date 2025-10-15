@@ -4,9 +4,9 @@ const contentCache = new Map();
 const promptCache = new Map();
 
 const socialMediaConfig = {
-  'facebook': { max_length: 80, focus: 'Emotion + simplicity' },
-  'instagram': { max_length: 200, focus: 'Visual + relatable' },
-  'linkedin': { max_length: 600, focus: 'Insight + storytelling' },
+  'facebook': { focus: 'Emotion + simplicity' },
+  'instagram': { focus: 'Visual + relatable' },
+  'linkedin': { focus: 'Insight + storytelling' },
 }
 
 /**
@@ -15,25 +15,29 @@ const socialMediaConfig = {
  * @param {string} platform - A platforma de mídia social (ex: 'instagram', 'facebook', 'linkedin').
  * @returns {Promise<string>} O texto gerado para o post.
  */
-async function generateSocialMediaContent(description, platform) {
-  console.info("GENERATE_SOCIAL_MEDIA_CONTENT", { description, platform: platform });
+async function generateSocialMediaContent(description, platform, companyName, category) {
+  console.info("GENERATE_SOCIAL_MEDIA_CONTENT", { description, platform, companyName, category });
 
   if (!description || !platform) {
     throw new Error("Description and platform are required");
   }
 
-  const cacheKey = `content::${platform}::${description}`;
+  const cacheKey = `content::${platform}::${description}::${companyName}::${category}`;
   if (contentCache.has(cacheKey)) {
-    console.info('CACHE HIT: generateSocialMediaContent', { description, platform });
+    console.info('CACHE HIT: generateSocialMediaContent', { description, platform, companyName, category });
     return contentCache.get(cacheKey);
   }
+
+  const companyContext = companyName ? `para a empresa '${companyName}'` : '';
+  const categoryContext = category ? `que atua na categoria de '${category}'` : '';
+  const contextString = [companyContext, categoryContext].filter(Boolean).join(' ');
 
   const response = await ai.models.generateContent({
     model: "gemini-2.5-flash",
     config: {
-      systemInstruction: `Você é um especialista em marketing digital e mídias sociais. Sua tarefa é criar um texto para um post para a platforma '${platform}'. 
+      systemInstruction: `Você é um especialista em marketing digital e mídias sociais. Sua tarefa é criar um texto para um post para a platforma '${platform}' ${contextString}.
       O texto deve ser **${socialMediaConfig[platform].focus}** , profissional e otimizado para o público e formato da platforma especificada. Evite usar hashtags a menos que seja explicitamente solicitado. 
-      Seja conciso e use fontes confiáveis. Output: Somente o texto gerado com até ${socialMediaConfig[platform].max_length} caracteres.`
+      Output: Somente o texto gerado`
     },
     contents: description
   });
